@@ -1,5 +1,7 @@
+import 'package:home_widget/home_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
+import 'home_screen.dart';
 import 'news_data.dart';
 
 class ArticleScreen extends StatefulWidget {
@@ -12,6 +14,9 @@ class ArticleScreen extends StatefulWidget {
 }
 
 class _ArticleScreenState extends State<ArticleScreen> {
+  final _globalKey = GlobalKey();
+  String? imagePath;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,10 +29,23 @@ class _ArticleScreenState extends State<ArticleScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
+        onPressed: () async {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Updating home screen widget...')),
           );
+          if (_globalKey.currentContext != null) {
+            var path = await HomeWidget.renderFlutterWidget(
+              const LineChart(),
+              key: 'filename',
+              logicalSize: _globalKey.currentContext!.size!,
+              pixelRatio: MediaQuery.of(_globalKey.currentContext!)
+                  .devicePixelRatio,
+            );
+            setState(() {
+              imagePath = path;
+            });
+          }
+          updateHeadline(widget.article);
         },
         label: const Text('Update Homescreen'),
       ),
@@ -41,7 +59,10 @@ class _ArticleScreenState extends State<ArticleScreen> {
           const SizedBox(height: 20.0),
           Text(widget.article.articleText!),
           const SizedBox(height: 20.0),
-          const Center(child: LineChart()),
+          Center(
+            key: _globalKey,
+            child: const LineChart(),
+          ),
           const SizedBox(height: 20.0),
           Text(widget.article.articleText!),
         ],

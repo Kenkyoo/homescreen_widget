@@ -1,7 +1,24 @@
+import 'package:home_widget/home_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'article_screen.dart';
 import 'news_data.dart';
+
+const String appGroupId = '<YOUR APP GROUP>';
+const String iOSWidgetName = 'NewsWidgets';
+const String androidWidgetName = 'NewsWidget';
+
+void updateHeadline(NewsArticle newHeadline) {
+  HomeWidget.saveWidgetData<String>('headline_title', newHeadline.title);
+  HomeWidget.saveWidgetData<String>(
+    'headline_description',
+    newHeadline.description,
+  );
+  HomeWidget.updateWidget(
+    iOSName: iOSWidgetName,
+    androidName: androidWidgetName,
+  );
+}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -10,6 +27,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    HomeWidget.setAppGroupId(appGroupId);
+    updateHeadline(getNewsStories()[0]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
