@@ -1,0 +1,29 @@
+import 'package:material_ui/material_ui.dart';
+
+import 'home_screen.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        appBarTheme: AppBarTheme(
+          backgroundColor: ColorScheme.fromSeed(seedColor: Colors.deepPurple)
+              .primaryContainer,
+        ),
+        textTheme: const TextTheme(
+          titleMedium: TextStyle(fontFamily: 'Chewy', fontSize: 20),
+        ),
+      ),
+      home: const MyHomePage(),
+    );
+  }
+}
